@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>恭喜，站点创建成功！</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/socket.io.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/axios.js"></script>
+    <script>
+        var isInitiator;
+
+        var room = prompt('Enter room name:'); //弹出一个输入窗口
+
+
+        const socket =  io.connect('http://127.0.0.1:9216')//与服务端建立socket连接
+
+        socket.on('connection', function (data) {
+            //console.log("connection"+JSON.stringify(data));
+        });
+
+        if (room !== '') { //如果房间不空，则发送 "create or join" 消息
+            console.log('Joining room ' + room);
+            socket.emit('create or join', room);
+        }
+
+        socket.on('full', (room) => { //如果从服务端收到 "full" 消息
+            console.log('Room ' + room + ' is full');
+        });
+
+        socket.on('empty', (room) => { //如果从服务端收到 "empty" 消息
+            isInitiator = true;
+            console.log('Room ' + room + ' is empty');
+        });
+
+        socket.on('join', (room) => { //如果从服务端收到 “join" 消息
+            console.log('Making request to join room ' + room);
+            console.log('You are the initiator!');
+        });
+
+        socket.on('log', (array) => {
+            console.log('\nThis is log:');
+            console.log.apply(console, array);
+        });
+
+    </script>
+</head>
+<body>
+<div class="container" style="margin-top:9%;">
+    <div class="jumbotron">
+        <div class="panel panel-success">
+            <div class="panel-heading"><h1>恭喜, 站点创建成功！</h1></div>
+        </div>
+        <p><h3>站点创建成功，本页面由系统自动生成。</h3></p>
+        <p><li>本页面在FTP根目录下的index.html</li></p>
+        <p><li>您可以删除或覆盖本页面</li></p>
+        <p><li>FTP相关信息，请到宝塔后台查看</li></p>
+        <p><li>我们为您提供了完善的数据备份功能，请到后台进行相关设置</li></p>
+    </div>
+</div>
+</body>
+</html>

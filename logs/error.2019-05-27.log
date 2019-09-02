@@ -1,0 +1,2 @@
+[2019-05-27T09:43:10.017] [ERROR] err - timener=>all_sid_sql ERROR: error:{"errorno":"ETIMEDOUT","code":"ETIMEDOUT","syscall":"connect","fatal":true}
+sqlselect sid from ecs_tbke where unix_timestamp(now())<expire_time
